@@ -11,19 +11,22 @@ buildscript {
         classpath group: 'gradle.plugin.com.github.spotbugs', name: 'spotbugs-gradle-plugin', version: '1.6.6'
         classpath group: 'org.ajoberstar.reckon', name: 'reckon-gradle', version: '0.9.0'
         classpath group: 'org.ajoberstar', name: 'gradle-git-publish', version: '2.0.0'
+//        classpath group: 'com.jfrog.bintray.gradle', name: 'gradle-bintray-plugin', version: '1.8.4'
 //        classpath 'com.github.spotbugs:spotbugs-annotations:3.1.9'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'idea'
+
 apply plugin: 'com.bmuschko.clover'
+//apply plugin: "com.jfrog.bintray"
+apply plugin: 'com.github.spotbugs'
+apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'org.ajoberstar.reckon'
 apply plugin: 'org.owasp.dependencycheck'
-apply plugin: 'com.github.ben-manes.versions'
-apply plugin: 'com.github.spotbugs'
 apply plugin: 'org.ajoberstar.git-publish'
-apply plugin: 'idea'
 
 
 group = 'io.ultrabrew'
@@ -52,6 +55,11 @@ dependencies {
 
 repositories {
     jcenter()
+}
+
+ext {
+    bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    bintrayKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
 }
 
 test {
@@ -107,6 +115,7 @@ uploadArchives {
         mavenDeployer {
             configuration = configurations.archives
             repository(url: "https://api.bintray.com/maven/ultrabrew/m2") {
+                authentication(userName: bintrayUser, password: bintrayKey)
             }
         }
     }
@@ -130,3 +139,5 @@ artifacts {
 javadoc.options {
     noQualifiers << 'java.*'
 }
+
+reckonTagCreate.dependsOn check

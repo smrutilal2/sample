@@ -3,7 +3,3 @@ install: true
 
 jdk:
   - oraclejdk8
-
-script:
-  - ./gradlew build reckonTagCreate reckonTagPush -Preckon.stage=final
-  - ./gradlew uploadArchives
