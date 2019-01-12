@@ -8,3 +8,5 @@ deploy:
   - provider: script
     script: ./gradlew gitPublishPush
     skip_cleanup: true
+    on:
+      branch: master
