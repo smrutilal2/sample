@@ -6,7 +6,5 @@ jdk:
 
 deploy:
   - provider: script
-    script: ./gradlew gitPublishPush
+    script: ./gradlew uploadArchives
     skip_cleanup: true
-    on:
-      branch: master
